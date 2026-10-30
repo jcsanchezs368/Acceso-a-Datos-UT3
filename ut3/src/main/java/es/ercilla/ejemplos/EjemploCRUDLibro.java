@@ -86,6 +86,13 @@ public class EjemploCRUDLibro {
             et.rollback();
         }
         return libro;
+    }
 
+    public static Libro buscarLibroPorId(EntityManagerFactory emf, Integer id){
+        EntityManager em = emf.createEntityManager();
+
+        Libro libro = em.find(Libro.class, id);
+
+        return libro;
     }
 }

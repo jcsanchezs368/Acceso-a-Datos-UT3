@@ -2,6 +2,7 @@ package es.ercilla.modelos;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Column;
@@ -9,34 +10,40 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity 
-@Table (name="LIBRO",
-        schema="LIBRERIA", // LIBRERIA.LIBRO
+@Entity
+@Table(name = "LIBRO", schema = "LIBRERIA", // LIBRERIA.LIBRO
         check = { // Restricciones check de la tabla libro
-            @CheckConstraint (
-                name="chk_calif_media", //nombre restricción
-                constraint = "calificacion_media BETWEEN 0 AND 10"
-            )
-        }) 
+                @CheckConstraint(name = "chk_calif_media", // nombre restricción
+                        constraint = "calificacion_media BETWEEN 0 AND 10")
+        })
 public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Estrategua de generación de ID
     private Integer id;
-    // Aquí no hace falta poner el atributo name="" debido a que ambos nombres coinciden, tanto en java como en postgres
+    // Aquí no hace falta poner el atributo name="" debido a que ambos nombres
+    // coinciden, tanto en java como en postgres
     @Column(nullable = false, length = 100) // Limitamos la longitud del String a 100 caracteres
     private String titulo;
 
-    @Column(name="FECHA_PUBLICACION", nullable = false)
+    @Column(name = "FECHA_PUBLICACION", nullable = false)
     private LocalDate fechaPublicacion;
 
-    @Column(name="DISPONIBLE_PRESTAMO", nullable = false)
+    @Column(name = "DISPONIBLE_PRESTAMO", nullable = false)
     private boolean disponiblePrestamo;
     // precision es el número de digitos que queremos que tenga el número //
     // scale es el número de decimales que puede tener nuestro número
-    @Column(name="CALIFICACION_MEDIA", precision = 4, scale = 2) 
+    @Column(name = "CALIFICACION_MEDIA", precision = 4, scale = 2)
     private BigDecimal calificacionMedia;
+
+    // Creada relacion con Ejemplar
+
+    @OneToMany(mappedBy = "libro") // el nombre corresponde con el nombre del atributo en la clase Ejemplar "private Libro libro"
+    private List<Ejemplar> ejemplares;
+
+    // RECORDATORIO, añadir las clases al persistence.xml, ya que si está creada de 0 seguramente no esté definida.
 
     public Libro() {
 
@@ -50,36 +57,48 @@ public class Libro {
         this.calificacionMedia = calificacionMedia;
     }
 
-
     public Integer getId() {
         return id;
     }
-    public void setId(Integer id) {
-        this.id = id;
-    }
+
     public String getTitulo() {
         return titulo;
     }
+
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
     public LocalDate getFechaPublicacion() {
         return fechaPublicacion;
     }
+
     public void setFechaPublicacion(LocalDate fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
+
     public boolean isDisponiblePrestamo() {
         return disponiblePrestamo;
     }
+
     public void setDisponiblePrestamo(boolean disponiblePrestamo) {
         this.disponiblePrestamo = disponiblePrestamo;
     }
+
     public BigDecimal getCalificacionMedia() {
         return calificacionMedia;
     }
+
     public void setCalificacionMedia(BigDecimal calificacionMedia) {
         this.calificacionMedia = calificacionMedia;
+    }
+
+    public List<Ejemplar> getEjemplares() {
+        return ejemplares;
+    }
+
+    public void setEjemplares(List<Ejemplar> ejemplares) {
+        this.ejemplares = ejemplares;
     }
 
     @Override

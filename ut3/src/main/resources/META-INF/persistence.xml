@@ -6,7 +6,8 @@
     version="3.2"> 
     <persistence-unit name="ad-clase" transaction-type="RESOURCE_LOCAL"> 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> 
-        <class>es.ercilla.modelos.Libro</class> 
+        <class>es.ercilla.modelos.Libro</class>
+        <class>es.ercilla.modelos.Ejemplar</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes> 
         <properties> 
 
