@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,8 +40,8 @@ public class Libro {
     private BigDecimal calificacionMedia;
 
     // Creada relacion con Ejemplar
-
-    @OneToMany(mappedBy = "libro") // el nombre corresponde con el nombre del atributo en la clase Ejemplar "private Libro libro"
+    // Cascade: Si inserto o elimino un libro, se insertarán o borrarán en cascadas todos sus ejemplares
+    @OneToMany(mappedBy = "libro", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }) // el nombre corresponde con el nombre del atributo en la clase Ejemplar "private Libro libro"
     private List<Ejemplar> ejemplares;
 
     // RECORDATORIO, añadir las clases al persistence.xml, ya que si está creada de 0 seguramente no esté definida.

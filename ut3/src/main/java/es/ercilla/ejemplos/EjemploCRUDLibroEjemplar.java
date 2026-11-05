@@ -29,7 +29,8 @@ public class EjemploCRUDLibroEjemplar {
       // 3. Consultar libro con sus ejemplares
         consultarLibroConEjemplaresLAZY(emf, 120);
       // 4. Consultar ejemplares por título de libro
-
+      System.out.println("EJEMPLARES CON TITULO SIMILAR A \"sombr\"");
+        System.err.println(consultarEjemplaresPorTituloLibroLIKE(emf, "sombr"));
       // 5. Resetear prestamos de un libro
 
       // 6. Borrar ejemplar
@@ -100,26 +101,90 @@ public class EjemploCRUDLibroEjemplar {
 
   public static List<Ejemplar> consultarEjemplaresPorTituloLibroLIKE(EntityManagerFactory emf,
       String titulo) {
-    //TODO
-    return null;
+    EntityManager em = emf.createEntityManager();
+    List<Ejemplar> resultados = em.createQuery(
+      """
+      SELECT e FROM Ejemplar e
+      JOIN e.libro l
+      WHERE LOWER (l.titulo) LIKE :titulo
+      """, Ejemplar.class).setParameter("titulo", "%" + titulo + "%").getResultList();
+
+    return resultados;
   }
 
   public static void resetearPrestamoEjemplaresLibro(EntityManagerFactory emf, Integer libroId) {
-    //TODO
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction tx = em.getTransaction();
+    // buscamos el libro cuyo ID=libroId
+    Libro l = em.find(Libro.class, libroId);
+    if(l == null){
+      return;
+    }
+    try {
+      tx.begin();
+      l.setDisponiblePrestamo(true);
+      for (Ejemplar e : l.getEjemplares()) {
+        // reseteamos el estado de prestamo de cada uno e sus ejemplares
+        e.setFechaFinPrestamo(null);
+        e.setPrestado(false);
+        tx.commit();
+      }
+    } catch (Exception e) {
+      tx.rollback();
+    }
+    em.close();
   }
 
   public static void borrarEjemplar(EntityManagerFactory emf, UUID codigo) {
-    //TODO
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction tx = em.getTransaction();
+    // buscamos el libro cuyo ID=libroId
+    Ejemplar ejemplar = em.find(Ejemplar.class, codigo);
+    if(ejemplar == null){
+      return;
+    }
+    try {
+      tx.begin();
+      // buscamos el libro al que pertenece ese ejemplar
+      Libro libro = ejemplar.getLibro();
+      // borramos la conexion del libro con el ejemplar
+      libro.getEjemplares().remove(ejemplar);
+      // borramos el ejemplar de la persistencia
+      em.remove(ejemplar);
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+    }
+    em.close();
   }
 
   public static Libro insertarLibroConEjemplares(EntityManagerFactory emf, Libro libro,
-      List<Ejemplar> ejemplares) {
-    //TODO
-    return null;
+    List<Ejemplar> ejemplares) {
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction tx = em.getTransaction();
+
+    try {
+      tx.begin();
+      em.persist(libro);
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+    }
+
+    return libro;
   }
 
   public static void borrarLibroConEjemplares(EntityManagerFactory emf, Integer libroId) {
-    //TODO
+            EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Libro libro = em.find(Libro.class, libroId);
+        if(libro != null){
+            em.remove(libro);
+            et.commit();
+        }else{
+            et.rollback();
+        }
   }
 
 }

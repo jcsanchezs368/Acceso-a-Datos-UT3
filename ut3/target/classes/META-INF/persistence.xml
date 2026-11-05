@@ -12,14 +12,13 @@
         <properties> 
 
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/> 
-            
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://192.168.29.12:10363/ad"/> 
             <property name="jakarta.persistence.jdbc.user" value="dam86"/> 
             <property name="jakarta.persistence.jdbc.password" value="20999936Q"/> 
 
             <property name="jakarta.persistence.create-database-schemas" value="true" /> 
-
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.show_sql" value="false"/> 
             <property name="hibernate.format_sql" value="true"/> 
         </properties> 
