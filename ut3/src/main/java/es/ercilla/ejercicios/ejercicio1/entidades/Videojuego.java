@@ -1,12 +1,16 @@
 package es.ercilla.ejercicios.ejercicio1.entidades;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -14,8 +18,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "VIDEOJUEGO", schema = "GAMERGY")
 public class Videojuego {
-    //TODO
-
     @Id
     @GeneratedValue(generator = "videojuego_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "videojuego_seq", allocationSize = 1, sequenceName = "VIDEOJUEGO_SEQ")
@@ -32,26 +34,31 @@ public class Videojuego {
     private boolean multijugador;
 
     @Column(name = "VALORACION_MEDIA")
-    private Float valoracionMedia;
+    private BigDecimal valoracionMedia;
 
     @Column(name="GENERO", nullable = false)
     private GeneroVideojuego genero;
 
+    @OneToMany (mappedBy = "videojuego")
+    private List<Torneo> torneos = new ArrayList<Torneo>();
+    
     public Videojuego(){
 
     }
 
-    
-
-    public Videojuego(String titulo, LocalDate fechaLanzamiento, boolean multijugador, Float valoracionMedia,
-            GeneroVideojuego genero) {
+    public Videojuego(String titulo, LocalDate fechaLanzamiento, boolean multijugador, BigDecimal valoracionMedia,
+            String genero) {
         this.titulo = titulo;
         this.fechaLanzamiento = fechaLanzamiento;
         this.multijugador = multijugador;
         this.valoracionMedia = valoracionMedia;
-        this.genero = genero;
+        try {
+            this.genero = GeneroVideojuego.valueOf(genero.toUpperCase());    
+        } catch (IllegalArgumentException e) {
+            System.err.println("NO EXISTE EL GÉNERO INTRODUCIDO");
+        }
+        
     }
-
 
 
     public int getId() {
@@ -86,11 +93,11 @@ public class Videojuego {
         this.multijugador = multijugador;
     }
 
-    public Float getValoracionMedia() {
+    public BigDecimal getValoracionMedia() {
         return valoracionMedia;
     }
 
-    public void setValoracionMedia(Float valoracionMedia) {
+    public void setValoracionMedia(BigDecimal valoracionMedia) {
         this.valoracionMedia = valoracionMedia;
     }
 
@@ -102,7 +109,13 @@ public class Videojuego {
         this.genero = genero;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Videojuego [id=" + id + ", titulo=" + titulo + ", fechaLanzamiento=" + fechaLanzamiento
+                + ", multijugador=" + multijugador + ", valoracionMedia=" + valoracionMedia + ", genero=" + genero
+                + "]";
+    }
 
+    
 
 }
