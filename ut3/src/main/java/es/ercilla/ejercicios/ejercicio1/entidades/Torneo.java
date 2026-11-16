@@ -22,9 +22,8 @@ import jakarta.persistence.Table;
 @Table (name = "TORNEO", schema="GAMERGY")
 public class Torneo {
     @Id
-
-    @SequenceGenerator (name = "torneo_seq", sequenceName = "TORNEO_SEQ", allocationSize = 1)
-    @GeneratedValue(generator = "torneo_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator (name = "torneo_id_seq", allocationSize = 1, initialValue = 1, sequenceName = "TORNEO_ID_SEQ")
+    @GeneratedValue(generator = "torneo_id_seq", strategy = GenerationType.SEQUENCE)
     @Column (name="ID", nullable = false)
     private int id;
 
@@ -34,8 +33,8 @@ public class Torneo {
     @Column (name = "FECHA_CELEBRACION", nullable = false)
     private LocalDate fechaCelebracion;
 
-    @Column (name="NUM_PLAZAS", nullable = false)
-    private int numPlazas;
+    @Column (name="PLAZAS", nullable = false)
+    private int plazas;
 
     @Column (name = "INSCRIPCION_ABIERTA", nullable = false)
     private boolean inscripcionAbierta;
@@ -49,6 +48,7 @@ public class Torneo {
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable (
+        schema = "GAMERGY",
         name="INSCRIPCION",
         joinColumns = @JoinColumn (name="torneo_id"),
         inverseJoinColumns = @JoinColumn (name="jugador_codigo")
@@ -63,7 +63,7 @@ public class Torneo {
             BigDecimal importeInscripcion) {
         this.nombre = nombre;
         this.fechaCelebracion = fechaCelebracion;
-        this.numPlazas = numPlazas;
+        this.plazas = numPlazas;
         this.inscripcionAbierta = inscripcionAbierta;
         this.importeInscripcion = importeInscripcion;
     }
@@ -124,12 +124,12 @@ public class Torneo {
         this.jugadores = jugadores;
     }
 
-    public int getNumPlazas() {
-        return numPlazas;
+    public int getPlazas() {
+        return plazas;
     }
 
-    public void setNumPlazas(int numPlazas) {
-        this.numPlazas = numPlazas;
+    public void setPlazas(int numPlazas) {
+        this.plazas = numPlazas;
     }
 
     @Override

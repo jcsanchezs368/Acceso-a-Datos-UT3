@@ -9,7 +9,7 @@ public class ValoracionMediaGeneroDto {
     
     public ValoracionMediaGeneroDto(GeneroVideojuego genero, Double valoracionMedia) {
         this.genero = genero;
-        if(valoracionMedia == null){
+        if(valoracionMedia == null  || valoracionMedia == 0){
             this.valoracionMedia = "Sin valoraciones";
         }else{
             this.valoracionMedia = String.valueOf(valoracionMedia);

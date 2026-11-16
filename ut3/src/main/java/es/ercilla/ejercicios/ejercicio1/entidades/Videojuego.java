@@ -1,12 +1,13 @@
 package es.ercilla.ejercicios.ejercicio1.entidades;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,8 +20,8 @@ import jakarta.persistence.Table;
 @Table(name = "VIDEOJUEGO", schema = "GAMERGY")
 public class Videojuego {
     @Id
-    @GeneratedValue(generator = "videojuego_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "videojuego_seq", allocationSize = 1, sequenceName = "VIDEOJUEGO_SEQ")
+    @GeneratedValue(generator = "videojuego_id_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "videojuego_id_seq", allocationSize = 1, sequenceName = "videojuego_id_seq")
     @Column(name="ID", nullable = false)
     private int id;
 
@@ -34,8 +35,8 @@ public class Videojuego {
     private boolean multijugador;
 
     @Column(name = "VALORACION_MEDIA")
-    private BigDecimal valoracionMedia;
-
+    private Float valoracionMedia;
+    @Enumerated(EnumType.STRING)
     @Column(name="GENERO", nullable = false)
     private GeneroVideojuego genero;
 
@@ -46,7 +47,7 @@ public class Videojuego {
 
     }
 
-    public Videojuego(String titulo, LocalDate fechaLanzamiento, boolean multijugador, BigDecimal valoracionMedia,
+    public Videojuego(String titulo, LocalDate fechaLanzamiento, boolean multijugador, Float valoracionMedia,
             String genero) {
         this.titulo = titulo;
         this.fechaLanzamiento = fechaLanzamiento;
@@ -93,11 +94,11 @@ public class Videojuego {
         this.multijugador = multijugador;
     }
 
-    public BigDecimal getValoracionMedia() {
+    public Float getValoracionMedia() {
         return valoracionMedia;
     }
 
-    public void setValoracionMedia(BigDecimal valoracionMedia) {
+    public void setValoracionMedia(Float valoracionMedia) {
         this.valoracionMedia = valoracionMedia;
     }
 

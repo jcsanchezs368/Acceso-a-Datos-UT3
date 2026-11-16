@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 
 public class RecaudacionTorneoDto {
     private String nombre;
-    private int numInscripciones;
+    private Long numInscripciones;
     private BigDecimal recaudacion;
 
     
-    public RecaudacionTorneoDto(String nombre, int numInscripciones, BigDecimal recaudacion) {
+    public RecaudacionTorneoDto(String nombre, Long numInscripciones, BigDecimal recaudacion) {
         this.nombre = nombre;
         this.numInscripciones = numInscripciones;
         this.recaudacion = recaudacion;
@@ -20,10 +20,10 @@ public class RecaudacionTorneoDto {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public int getNumInscripciones() {
+    public Long getNumInscripciones() {
         return numInscripciones;
     }
-    public void setNumInscripciones(int numInscripciones) {
+    public void setNumInscripciones(Long numInscripciones) {
         this.numInscripciones = numInscripciones;
     }
     public BigDecimal getRecaudacion() {
